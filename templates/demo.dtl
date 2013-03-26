@@ -1,0 +1,122 @@
+{% extends "base.dtl" %}
+
+{% block head_extra %}
+<script type="text/javascript" src="/js/jquery-1.8.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery.caret.js"></script>
+<script type="text/javascript">
+var pos;
+$(function() {
+	var repl_uri = 'ws://' + window.location.host + '/repl';
+	var web_sock = null;
+	if ('MozWebSocket' in window)
+		web_sock = new MozWebSocket(repl_uri);
+	else if ('WebSocket' in window)
+		web_sock = new WebSocket(repl_uri);
+	
+	if (web_sock == null)
+	{
+		alert('The demo uses WebSocket API and your browser is either does' +
+			  ' not support it or have the API disabled. Please use a more ' +
+			  ' recent browser or turn on WebSocket API.');
+	}
+	else
+	{
+		web_sock.onopen = function() {
+			pos = 0;
+			$('.term').removeAttr('disabled');
+			$('.term').val('').focus();
+		};
+
+		web_sock.onmessage = function(ev) {
+			var cur_text = $('.term').val();
+			var new_text = cur_text.substr(0, pos) +
+					ev.data + cur_text.substr(pos, cur_text.length);
+			$('.term').val(new_text);
+			pos += ev.data.length;
+			$('.term').caret(new_text.length);
+			$('.status').addClass('idle').html('Idle');
+		};
+	}
+
+	$('.term').keypress(function(ev) {
+		var caret = $('.term').caret();
+		if (caret < pos && ev.which != 0 && ev.which != 13)
+			return false;
+		if (caret == pos && ev.which == 8)
+			return false;
+		if (ev.which == 13)
+		{
+			var text = $('.term').val();
+			var expr = text.substr(pos);
+			pos += expr.length;
+			web_sock.send(expr);
+			$('.status').removeClass('idle').html('Running');
+			return false;
+		}
+
+		return true;
+	});
+
+	(function update_stats() {
+		$.ajax({
+			url: '/stats',
+			dataType: 'json',
+			success: function(data) {
+				$.each(data, function(key, val) {
+					$('#'+key).text(val);
+				});
+				setTimeout(update_stats, 5000);
+			},
+			error: function() {
+				alert('Connection to \'tryling\' lost. Try reloading the page or rebooting the instance.')
+				$('.term').attr('disabled', 'disabled');
+				$('.status').addClass('idle').html('Disconnected');
+			}	
+		});
+	})();
+});
+</script>
+{% endblock %}
+
+{% block header %}
+<div class="shell">Erlang VM (ling-0.2.0) <span class="status idle">Idle</span></div>
+<div class="stove">
+	<div class="line"><div class="tag">Context switches</div>
+			<div class="val" id="context-switches">-</div></div>
+	<div class="line"><div class="tag">Reductions</div>
+			<div class="val" id="reductions">-</div></div>
+	<div class="line"><div class="tag">GC runs</div>
+			<div class="val" id="gc-runs">-</div></div>
+	<div class="line"><div class="tag">Words reclaimed</div>
+			<div class="val" id="words-reclaimed">-</div></div>
+	<div class="line"><div class="tag">I/O - input</div>
+			<div class="val" id="io-input">-</div></div>
+	<div class="line"><div class="tag">I/O - output</div>
+			<div class="val" id="io-output">-</div></div>
+</div>
+<div class="stove">
+	<div class="line"><div class="tag">Run queue</div>
+			<div class="val" id="run-queue">-</div></div>
+	<div class="line"><div class="tag">Runtime</div>
+			<div class="val" id="runtime">-</div></div>
+	<div class="line"><div class="tag">Wall clock</div>
+			<div class="val" id="wall-clock">-</div></div>
+	<div class="line"><div class="tag">Memory - processes</div>
+			<div class="val" id="memory-processes">-</div></div>
+	<div class="line"><div class="tag">Memory - system</div>
+			<div class="val" id="memory-system">-</div></div>
+	<div class="line"><div class="tag">Memory - ets</div>
+			<div class="val" id="memory-ets">-</div></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<textarea class="term" disabled="disabled"></textarea> 
+{% endblock %}
+
+{% block cellar %}
+This page is served by an Erlang on Xen (ling-0.2.0) instance running on Amazon EC2.<br>
+Instructions on how to launch such instances can be found at <a
+href="http://try.erlangonxen.org">try.erlangonxen.org</a>.<br>
+E-mail: <a href="mailto:info@erlangonxen.org">info@erlangonxen.org</a>.
+{% endblock %}

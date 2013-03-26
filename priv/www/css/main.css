@@ -1,0 +1,86 @@
+body {
+	padding: 0;
+	margin: 0;
+}
+
+.cover {
+	background-color: #bf9930;
+}
+
+.page {
+	width: 960px;
+	margin: 0 auto;
+	background-color: #fff;
+	padding: 0 10px;
+}
+
+.header {
+	height: 100px;
+	background: #fff url(/images/try1.png) no-repeat 32px 5px;
+}
+
+.content {
+	padding: 10px 20px;
+}
+
+.cellar {
+	background-color: #808080;
+	height: 100px;
+	text-align: center;
+	padding: 10px;
+	font-size: 12px;
+	color: #333;
+}
+
+.cellar a {
+	color: #111;
+	text-decoration: none;
+}
+
+textarea.term {
+	height: 640px;
+	width: 920px;
+	border: none;
+	font-family: Andale mono, monospace;
+	font-size: 16px;
+}
+
+.header {
+	font-family: Andale mono, monospace;
+	font-size: 14px;
+	color: #666;
+}
+
+.shell {
+	float: left;
+	margin-top: 85px;
+	margin-left: 20px;
+}
+
+.stove {
+	margin: 5px 10px 0px 20px;
+	float: right;
+	width: 240px;
+}
+
+.tag {
+	float: left;
+	width: 150px;
+}
+
+.val {
+	text-align: right;
+}
+
+.status {
+	padding: 4px 8px 2px 8px;
+	background-color: #ffbb00;
+	border-radius: 8px;
+	color: #fff;
+}
+
+.status.idle {
+	background-color: #bf9930;
+}
+
+/*EOF*/

@@ -1,0 +1,12 @@
+{application, tryling,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { tryling_app, []}},
+  {env, []}
+ ]}.

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<title>Try Erlang on Xen - hosted on Amazon EC2</title>
+
+<link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+
+<link href="/css/main.css" type="text/css" rel="stylesheet"/>
+
+<meta name="keywords" content="Erlang, Xen, Erlang VM, zero-footprint cloud,
+Ling, hypervisor, exokernel, operating system, cloud computing, elastic, system
+software, scalable software, scalability, AMI, Amazon Machine Image">
+
+{% block head_extra %}{% endblock %}
+</head>
+<body>
+<div class="cover">
+<div class="page">
+	<div class="header">{% block header %}{% endblock %}</div>
+	<div class="content">{% block content %}{% endblock %}</div>
+</div>
+</div>
+<div class="cellar">{% block cellar %}{% endblock %}</div>
+</body>
+</html>
